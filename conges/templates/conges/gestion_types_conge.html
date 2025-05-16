@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Types de congé - Congenius{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-teal-600">Types de congé</h1>
+        <a href="{% url 'ajouter_type_conge' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md">
+            Ajouter un type de congé
+        </a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        {% if types_conge %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Congé payé</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée maximale</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for type_conge in types_conge %}
+                            <tr>
+                                <td class="py-3 px-4 text-sm">{{ type_conge.nom }}</td>
+                                <td class="py-3 px-4 text-sm">
+                                    {% if type_conge.description %}
+                                        {{ type_conge.description|truncatechars:50 }}
+                                    {% else %}
+                                        <span class="text-gray-400">-</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 px-4 text-sm">
+                                    {% if type_conge.est_paye %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Oui</span>
+                                    {% else %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Non</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 px-4 text-sm">
+                                    {% if type_conge.duree_max %}
+                                        {{ type_conge.duree_max }} jours
+                                    {% else %}
+                                        <span class="text-gray-400">Illimitée</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-3 px-4 text-sm">
+                                    <div class="flex space-x-2">
+                                        <a href="{% url 'modifier_type_conge' type_conge.id %}" class="text-teal-600 hover:text-teal-700">
+                                            Modifier
+                                        </a>
+                                        <a href="{% url 'supprimer_type_conge' type_conge.id %}" class="text-red-600 hover:text-red-700">
+                                            Supprimer
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-gray-500 italic">Aucun type de congé n'a été créé.</p>
+            <div class="mt-4 text-center">
+                <a href="{% url 'ajouter_type_conge' %}" class="text-teal-600 hover:text-teal-700">
+                    Créer votre premier type de congé →
+                </a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'dashboard_admin' %}" class="text-teal-600 hover:text-teal-700">
+            ← Retour au tableau de bord
+        </a>
+    </div>
+</div>
+{% endblock %}

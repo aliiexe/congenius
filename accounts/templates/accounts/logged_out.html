@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Déconnexion - Congenius{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <h1 class="text-2xl font-bold text-teal-600 mb-6 text-center">Déconnexion réussie</h1>
+    
+    <p class="text-center text-gray-600 mb-6">Vous avez été déconnecté avec succès.</p>
+    
+    <div class="text-center">
+        <a href="{% url 'login' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-md">
+            Se reconnecter
+        </a>
+    </div>
+    
+    <div class="mt-6 text-center">
+        <a href="{% url 'home' %}" class="text-teal-600 hover:text-teal-700">
+            Retour à l'accueil
+        </a>
+    </div>
+</div>
+{% endblock %}

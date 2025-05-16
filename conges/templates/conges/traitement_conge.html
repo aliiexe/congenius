@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Traitement de demande - Congenius{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold text-teal-600 mb-6">Traitement de demande de congé</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Détails de la demande</h2>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+                <p class="text-sm text-gray-500">Employé</p>
+                <p class="font-medium">{{ conge.employe.prenom }} {{ conge.employe.nom }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Poste</p>
+                <p class="font-medium">{{ conge.employe.poste }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Type de congé</p>
+                <p class="font-medium">{{ conge.type_conge.nom }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Congé payé</p>
+                <p class="font-medium">{{ conge.type_conge.est_paye|yesno:"Oui,Non" }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Période</p>
+                <p class="font-medium">{{ conge.date_debut|date:"d/m/Y" }} - {{ conge.date_fin|date:"d/m/Y" }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Durée</p>
+                <p class="font-medium">{{ conge.date_debut|timesince:conge.date_fin|cut:" days, 0:00:00" }}</p>
+            </div>
+            <div class="col-span-2">
+                <p class="text-sm text-gray-500">Motif</p>
+                <p class="font-medium">
+                    {% if conge.motif %}
+                        {{ conge.motif }}
+                    {% else %}
+                        <span class="text-gray-400">Aucun motif fourni</span>
+                    {% endif %}
+                </p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Date de demande</p>
+                <p class="font-medium">{{ conge.date_demande|date:"d/m/Y H:i" }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Statut actuel</p>
+                <p class="font-medium">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        {% if conge.statut == 'En attente' %}bg-yellow-100 text-yellow-800
+                        {% elif conge.statut == 'Approuvé' %}bg-green-100 text-green-800
+                        {% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ conge.statut }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            
+            <div>
+                <label for="{{ form.statut.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Décision</label>
+                {{ form.statut }}
+                {% if form.statut.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.statut.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="{{ form.commentaire_admin.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Commentaire (optionnel)</label>
+                {{ form.commentaire_admin }}
+                {% if form.commentaire_admin.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.commentaire_admin.errors.0 }}</p>
+                {% endif %}
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <a href="{% url 'gestion_conges' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">
+                    Annuler
+                </a>
+                <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                    Enregistrer la décision
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'gestion_conges' %}" class="text-teal-600 hover:text-teal-700">
+            ← Retour à la gestion des congés
+        </a>
+    </div>
+</div>
+{% endblock %}

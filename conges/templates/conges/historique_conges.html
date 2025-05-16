@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Historique des congés - Congenius{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <h1 class="text-2xl font-bold text-teal-600 mb-6">Historique des congés</h1>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">Filtrer les résultats</h2>
+            
+            <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="id_statut" class="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                    {{ filter.form.statut }}
+                </div>
+                <div>
+                    <label for="id_type_conge" class="block text-sm font-medium text-gray-700 mb-1">Type de congé</label>
+                    {{ filter.form.type_conge }}
+                </div>
+                <div>
+                    <label for="id_date_debut" class="block text-sm font-medium text-gray-700 mb-1">À partir du</label>
+                    {{ filter.form.date_debut }}
+                </div>
+                <div>
+                    <label for="id_date_fin" class="block text-sm font-medium text-gray-700 mb-1">Jusqu'au</label>
+                    {{ filter.form.date_fin }}
+                </div>
+                <div class="md:col-span-4 flex justify-end">
+                    <button type="submit" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md">
+                        Filtrer
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        {% if conges %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Période</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date de demande</th>
+                            <th class="py-2 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commentaire</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for conge in conges %}
+                            <tr>
+                                <td class="py-3 px-4 text-sm">{{ conge.type_conge.nom }}</td>
+                                <td class="py-3 px-4 text-sm">{{ conge.date_debut|date:"d/m/Y" }} - {{ conge.date_fin|date:"d/m/Y" }}</td>
+                                <td class="py-3 px-4 text-sm">{{ conge.date_debut|timesince:conge.date_fin|cut:" days, 0:00:00" }}</td>
+                                <td class="py-3 px-4 text-sm">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        {% if conge.statut == 'En attente' %}bg-yellow-100 text-yellow-800
+                                        {% elif conge.statut == 'Approuvé' %}bg-green-100 text-green-800
+                                        {% else %}bg-red-100 text-red-800{% endif %}">
+                                        {{ conge.statut }}
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4 text-sm">{{ conge.date_demande|date:"d/m/Y H:i" }}</td>
+                                <td class="py-3 px-4 text-sm">
+                                    {% if conge.commentaire_admin %}
+                                        {{ conge.commentaire_admin }}
+                                    {% else %}
+                                        <span class="text-gray-400">-</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-gray-500 italic">Aucun congé trouvé avec les critères sélectionnés.</p>
+        {% endif %}
+    </div>
+    
+    <div class="mt-6">
+        <a href="{% url 'dashboard_employe' %}" class="text-teal-600 hover:text-teal-700">
+            ← Retour au tableau de bord
+        </a>
+    </div>
+</div>
+{% endblock %}

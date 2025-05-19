@@ -13,6 +13,11 @@ from .forms import DemandeCongeForm, TraitementCongeForm, TypeCongeForm
 import django_filters
 from django.http import HttpRequest
 
+from django.db.models.functions import ExtractDay, Cast
+from django.db.models import F, IntegerField
+from django.db.models import Count, Sum
+import json
+
 User = get_user_model()
 
 class CongeFilter(django_filters.FilterSet):
@@ -104,10 +109,44 @@ def historique_conges(request):
         messages.error(request, "Profil employé non trouvé. Veuillez contacter un administrateur.")
         return redirect('home')
 
+from django.db.models.functions import ExtractDay, Cast
+from django.db.models import F, IntegerField, ExpressionWrapper, DurationField, DateField
+
 @login_required
 @user_passes_test(is_admin)
 def dashboard_admin(request):
     conges = Conge.objects.all().order_by('-date_demande')
+    
+    # Calcul des statistiques par employé avec calcul de la durée
+    employes_stats = (
+        Conge.objects
+        .values('employe__prenom', 'employe__nom')
+        .annotate(
+            total_jours=ExpressionWrapper(
+                F('date_fin') - F('date_debut'),
+                output_field=DurationField()
+            )
+        )
+        .order_by('-total_jours')[:5]
+    )
+    
+    # Préparation des données pour les graphiques
+    employes_labels = []
+    employes_data = []
+    for stat in employes_stats:
+        employes_labels.append(f"{stat['employe__prenom']} {stat['employe__nom']}")
+        # Convertir la durée en jours en ajoutant 1 pour inclure le jour de début
+        duree = stat['total_jours']
+        jours = duree.days + 1 if duree else 0
+        employes_data.append(jours)
+
+    # Calcul des statistiques par type de congé
+    types_stats = (
+        Conge.objects
+        .values('type_conge__nom')
+        .annotate(total=Count('id'))
+        .order_by('-total')
+    )
     
     context = {
         'conges': conges,
@@ -115,7 +154,12 @@ def dashboard_admin(request):
         'conges_approuves': conges.filter(statut='Approuvé').count(),
         'conges_rejetes': conges.filter(statut='Rejeté').count(),
         'employes': Employe.objects.count(),
+        'employes_labels': json.dumps(employes_labels),
+        'employes_data': json.dumps(employes_data),
+        'types_conges_labels': json.dumps([t['type_conge__nom'] for t in types_stats]),
+        'types_conges_data': json.dumps([t['total'] for t in types_stats])
     }
+    
     return render(request, 'conges/dashboard_admin.html', context)
 
 @login_required

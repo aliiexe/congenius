@@ -2,49 +2,297 @@
 
 {% block title %}Congenius - Accueil{% endblock %}
 
+{% block extra_head %}
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateX(-30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  .animate-slideIn {
+    animation: slideIn 0.6s ease-out forwards;
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  .feature-card {
+    transition: all 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 150, 136, 0.1), 0 10px 10px -5px rgba(0, 150, 136, 0.04);
+  }
+  
+  .btn-primary {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-primary:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  .btn-primary:hover:after {
+    animation: ripple 1s ease-out;
+  }
+  
+  @keyframes ripple {
+    0% {
+      transform: scale(0, 0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(20, 20);
+      opacity: 0;
+    }
+  }
+  
+  .hero-wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: -1;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="text-center">
-    <h1 class="text-4xl font-bold text-teal-600 mb-6">Bienvenue sur Congenius</h1>
-    <p class="text-xl mb-8">Votre solution complète pour la gestion des congés en entreprise</p>
+<div class="relative min-h-screen bg-gradient-to-b from-teal-50 to-white pb-20">
+
+  <div class="container mx-auto px-4 pt-10 relative z-10">
+    <!-- En-tête -->
+    <div class="text-center mb-16 opacity-0 animate-fadeIn" style="animation-delay: 0.2s;">
+      <h1 class="text-5xl font-bold text-teal-600 mb-4">Bienvenue sur <span class="bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-emerald-600">Congenius</span></h1>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">Votre solution complète pour la gestion des congés en entreprise</p>
+    </div>
     
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8 mb-8">
-        <h2 class="text-2xl font-semibold text-teal-700 mb-4">Fonctionnalités principales</h2>
-        
-        <div class="grid md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-teal-50 p-6 rounded-lg">
-                <h3 class="text-xl font-semibold text-teal-700 mb-2">Pour les employés</h3>
-                <ul class="list-disc list-inside text-left">
-                    <li>Demande de congés simplifiée</li>
-                    <li>Suivi de l'historique des demandes</li>
-                    <li>Notifications de statut</li>
-                    <li>Interface intuitive</li>
-                </ul>
-            </div>
-            
-            <div class="bg-teal-50 p-6 rounded-lg">
-                <h3 class="text-xl font-semibold text-teal-700 mb-2">Pour les administrateurs</h3>
-                <ul class="list-disc list-inside text-left">
-                    <li>Gestion centralisée des demandes</li>
-                    <li>Tableaux de bord analytiques</li>
-                    <li>Configuration des types de congés</li>
-                    <li>Suivi des absences</li>
-                </ul>
-            </div>
+    <!-- Image ou illustration -->
+    <div class="max-w-4xl mx-auto mb-16 opacity-0 animate-fadeIn" style="animation-delay: 0.4s;">
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="relative h-64 bg-gradient-to-r from-teal-500 to-emerald-500 overflow-hidden flex items-center justify-center">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="h-48 w-48 text-white opacity-10" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+          </div>
+          <div class="relative z-10 text-white text-center">
+            <h2 class="text-3xl font-bold">Simplifiez votre gestion des congés</h2>
+            <p class="mt-2 text-lg">Tout ce dont vous avez besoin sur une seule plateforme</p>
+          </div>
         </div>
+      </div>
     </div>
     
-    <div class="flex flex-col md:flex-row justify-center gap-4">
-        {% if user.is_authenticated %}
-            {% if user.is_admin %}
-                <a href="{% url 'dashboard_admin' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg">Accéder au tableau de bord</a>
-            {% else %}
-                <a href="{% url 'dashboard_employe' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg">Accéder à mon espace</a>
-                <a href="{% url 'demande_conge' %}" class="bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-3 px-6 rounded-lg">Demander un congé</a>
-            {% endif %}
-        {% else %}
-            <a href="{% url 'login' %}" class="bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg">Se connecter</a>
-            <a href="{% url 'register' %}" class="bg-teal-100 hover:bg-teal-200 text-teal-800 font-bold py-3 px-6 rounded-lg">S'inscrire</a>
-        {% endif %}
+    <!-- Fonctionnalités principales -->
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 mb-16 opacity-0 animate-fadeIn" style="animation-delay: 0.6s;">
+      <h2 class="text-2xl font-semibold text-teal-700 mb-6 text-center">Fonctionnalités principales</h2>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="feature-card bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-xl opacity-0 animate-slideIn" style="animation-delay: 0.8s;">
+          <div class="bg-teal-500 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-teal-700 mb-3">Pour les employés</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Demande de congés simplifiée
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Suivi de l'historique des demandes
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Notifications de statut en temps réel
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Interface intuitive et mobile-friendly
+            </li>
+          </ul>
+        </div>
+        
+        <div class="feature-card bg-gradient-to-br from-teal-50 to-teal-100 p-6 rounded-xl opacity-0 animate-slideIn" style="animation-delay: 1s;">
+          <div class="bg-teal-500 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-teal-700 mb-3">Pour les administrateurs</h3>
+          <ul class="space-y-2">
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Gestion centralisée des demandes
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Tableaux de bord analytiques
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Configuration des types de congés
+            </li>
+            <li class="flex items-start">
+              <svg class="w-5 h-5 text-teal-500 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+              Suivi des absences 
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Statistiques -->
+      <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 opacity-0 animate-fadeIn" style="animation-delay: 1.2s;">
+        <div class="text-center p-4 border border-teal-100 rounded-lg">
+          <div class="text-3xl font-bold text-teal-600 mb-1">100%</div>
+          <div class="text-sm text-gray-500">Satisfaction</div>
+        </div>
+        <div class="text-center p-4 border border-teal-100 rounded-lg">
+          <div class="text-3xl font-bold text-teal-600 mb-1">50%</div>
+          <div class="text-sm text-gray-500">Gain de temps</div>
+        </div>
+        <div class="text-center p-4 border border-teal-100 rounded-lg">
+          <div class="text-3xl font-bold text-teal-600 mb-1">24/7</div>
+          <div class="text-sm text-gray-500">Disponibilité</div>
+        </div>
+        <div class="text-center p-4 border border-teal-100 rounded-lg">
+          <div class="text-3xl font-bold text-teal-600 mb-1">10K+</div>
+          <div class="text-sm text-gray-500">Utilisateurs</div>
+        </div>
+      </div>
     </div>
+    
+    <!-- Boutons d'action -->
+    <div class="flex flex-col md:flex-row justify-center gap-6 opacity-0 animate-fadeIn" style="animation-delay: 1.4s;">
+      {% if user.is_authenticated %}
+          {% if user.is_admin %}
+              <a href="{% url 'dashboard_admin' %}" class="btn-primary bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg flex items-center justify-center animate-pulse">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                </svg>
+                Accéder au tableau de bord
+              </a>
+          {% else %}
+              <a href="{% url 'dashboard_employe' %}" class="btn-primary bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Accéder à mon espace
+              </a>
+              <a href="{% url 'demande_conge' %}" class="btn-primary bg-white border-2 border-teal-500 hover:bg-teal-50 text-teal-700 font-bold py-4 px-8 rounded-lg shadow-lg flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Demander un congé
+              </a>
+          {% endif %}
+      {% else %}
+          <a href="{% url 'login' %}" class="btn-primary bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg flex items-center justify-center animate-pulse">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+            Se connecter
+          </a>
+          <a href="{% url 'register' %}" class="btn-primary bg-white border-2 border-teal-500 hover:bg-teal-50 text-teal-700 font-bold py-4 px-8 rounded-lg shadow-lg flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+            S'inscrire
+          </a>
+      {% endif %}
+    </div>
+    
+    <!-- Témoignages ou informations supplémentaires -->
+    <div class="max-w-5xl mx-auto mt-16 opacity-0 animate-fadeIn" style="animation-delay: 1.6s;">
+      <div class="bg-gradient-to-r from-teal-500 to-emerald-500 rounded-xl shadow-lg overflow-hidden">
+        <div class="p-8 text-white text-center">
+          <h3 class="text-2xl font-bold mb-4">Prêt à simplifier la gestion de vos congés ?</h3>
+          <p class="mb-6">Rejoignez des milliers d'entreprises qui font confiance à Congenius pour leur gestion des congés.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animation des éléments au scroll
+    const animateOnScroll = function() {
+      const elements = document.querySelectorAll('.opacity-0');
+      
+      elements.forEach(element => {
+        const position = element.getBoundingClientRect();
+        
+        // Si l'élément est visible dans la fenêtre
+        if(position.top < window.innerHeight - 100) {
+          element.classList.remove('opacity-0');
+        }
+      });
+    };
+    
+    // Exécuter une fois au chargement
+    animateOnScroll();
+    
+    // Puis à chaque scroll
+    window.addEventListener('scroll', animateOnScroll);
+    
+    // Animation des boutons
+    const buttons = document.querySelectorAll('.btn-primary');
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', function() {
+        this.classList.add('scale-105');
+        setTimeout(() => {
+          this.classList.remove('scale-105');
+        }, 300);
+      });
+    });
+    
+    // Animation des cartes au survol
+    const cards = document.querySelectorAll('.feature-card');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.classList.add('scale-105');
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.classList.remove('scale-105');
+      });
+    });
+  });
+</script>
 {% endblock %}

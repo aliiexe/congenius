@@ -2,48 +2,164 @@
 
 {% block title %}Connexion - Congenius{% endblock %}
 
+{% block extra_head %}
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .form-field {
+    opacity: 0;
+  }
+  
+  .form-field:nth-child(1) { animation: fadeIn 0.4s ease-out 0.1s forwards; }
+  .form-field:nth-child(2) { animation: fadeIn 0.4s ease-out 0.2s forwards; }
+  .form-field:nth-child(3) { animation: fadeIn 0.4s ease-out 0.3s forwards; }
+  
+  .input-field {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .input-field:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+  }
+  
+  .submit-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    transform: translateY(-2px);
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
-    <h1 class="text-2xl font-bold text-teal-600 mb-6 text-center">Connexion</h1>
+<div class="min-h-screen bg-gradient-to-b from-teal-50 to-white py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+  <div class="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fadeIn">
+    <!-- Header avec gradient -->
+    <div class="bg-gradient-to-r from-teal-500 to-teal-600 py-6 px-8">
+      <div class="flex items-center justify-center">
+        <svg class="w-8 h-8 text-white mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+        </svg>
+        <h1 class="text-2xl font-bold text-white">Connexion</h1>
+      </div>
+      <p class="mt-2 text-center text-teal-100">Connectez-vous à votre compte Congenius</p>
+    </div>
     
-    <form method="post" class="space-y-4">
+    <!-- Formulaire -->
+    <div class="p-8">
+      <form method="post" class="space-y-5">
         {% csrf_token %}
         
-        <div>
-            <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <div class="form-field">
+          <label for="{{ form.username.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Email
+          </label>
+          <div class="relative">
             {{ form.username }}
             {% if form.username.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.username.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.username.errors.0 }}</p>
+          {% endif %}
         </div>
         
-        <div>
-            <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+        <div class="form-field">
+          <label for="{{ form.password.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            Mot de passe
+          </label>
+          <div class="relative">
             {{ form.password }}
             {% if form.password.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.password.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.password.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.password.errors.0 }}</p>
+          {% endif %}
         </div>
         
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
-                <label for="remember_me" class="ml-2 block text-sm text-gray-700">Se souvenir de moi</label>
-            </div>
-            <a href="{% url 'password_reset' %}" class="text-sm text-teal-600 hover:text-teal-500">Mot de passe oublié?</a>
+        <div class="flex items-center justify-between text-sm">
+          <div class="flex items-center">
+            <input id="remember_me" name="remember_me" type="checkbox" class="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded">
+            <label for="remember_me" class="ml-2 block text-gray-700">Se souvenir de moi</label>
+          </div>
+          <a href="{% url 'password_reset' %}" class="font-medium text-teal-600 hover:text-teal-500">Mot de passe oublié?</a>
         </div>
         
-        <div>
-            <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-                Se connecter
-            </button>
+        <div class="form-field">
+                  <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out submit-btn">
+                    Se connecter
+                  </button>
         </div>
-    </form>
-    
-    <div class="mt-6 text-center">
+      </form>
+      
+      <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
-            Vous n'avez pas de compte? <a href="{% url 'register' %}" class="text-teal-600 hover:text-teal-500">S'inscrire</a>
+          Vous n'avez pas de compte? 
+          <a href="{% url 'register' %}" class="font-medium text-teal-600 hover:text-teal-500 flex items-center justify-center mt-2">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+            S'inscrire
+          </a>
         </p>
+      </div>
     </div>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Amélioration du focus sur les champs
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('ring-2', 'ring-teal-100', 'rounded-lg');
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('ring-2', 'ring-teal-100', 'rounded-lg');
+      });
+    });
+    
+    // Animation du bouton de soumission
+    const submitBtn = document.querySelector('.submit-btn');
+    if (submitBtn) {
+      submitBtn.addEventListener('mouseenter', function() {
+        this.classList.add('scale-105');
+        setTimeout(() => {
+          this.classList.remove('scale-105');
+        }, 300);
+      });
+    }
+  });
+</script>
 {% endblock %}

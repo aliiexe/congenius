@@ -2,77 +2,341 @@
 
 {% block title %}Inscription - Congenius{% endblock %}
 
+{% block extra_head %}
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .form-field {
+    opacity: 0;
+  }
+  
+  .form-field:nth-child(1) { animation: fadeIn 0.4s ease-out 0.1s forwards; }
+  .form-field:nth-child(2) { animation: fadeIn 0.4s ease-out 0.2s forwards; }
+  .form-field:nth-child(3) { animation: fadeIn 0.4s ease-out 0.3s forwards; }
+  .form-field:nth-child(4) { animation: fadeIn 0.4s ease-out 0.4s forwards; }
+  .form-field:nth-child(5) { animation: fadeIn 0.4s ease-out 0.5s forwards; }
+  .form-field:nth-child(6) { animation: fadeIn 0.4s ease-out 0.6s forwards; }
+  .form-field:nth-child(7) { animation: fadeIn 0.4s ease-out 0.7s forwards; }
+  .form-field:nth-child(8) { animation: fadeIn 0.4s ease-out 0.8s forwards; }
+  
+  .input-field {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .input-field:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+  }
+  
+  .submit-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    transform: translateY(-2px);
+  }
+  
+  .submit-btn:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+  }
+  
+  .submit-btn:hover:after {
+    animation: ripple 1s ease-out;
+  }
+  
+  @keyframes ripple {
+    0% {
+      transform: scale(0, 0);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(20, 20);
+      opacity: 0;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
-    <h1 class="text-2xl font-bold text-teal-600 mb-6 text-center">Inscription</h1>
+<div class="min-h-screen bg-gradient-to-b from-teal-50 to-white py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center">
+  <div class="max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden animate-fadeIn">
+    <!-- Header avec gradient -->
+    <div class="bg-gradient-to-r from-teal-500 to-teal-600 py-6 px-8">
+      <div class="flex items-center justify-center">
+        <svg class="w-8 h-8 text-white mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+        </svg>
+        <h1 class="text-2xl font-bold text-white">Créer votre compte</h1>
+      </div>
+      <p class="mt-2 text-center text-teal-100">Rejoignez Congenius pour simplifier la gestion de vos congés</p>
+    </div>
     
-    <form method="post" class="space-y-4">
+    <!-- Formulaire -->
+    <div class="p-8">
+      <form method="post" class="space-y-5">
         {% csrf_token %}
         
-        <div>
-            <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <div class="form-field">
+          <label for="{{ form.email.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Email
+          </label>
+          <div class="relative">
             {{ form.email }}
+            <style>
+              /* Ajout de style pour le champ email */
+              {{ form.email.id_for_label }} {
+                @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+              }
+            </style>
             {% if form.email.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.email.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.email.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+          {% endif %}
         </div>
         
-        <div>
-            <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
-            {{ form.first_name }}
+        <div class="form-field grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="{{ form.first_name.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+              <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              Prénom
+            </label>
+            <div class="relative">
+              {{ form.first_name }}
+              <style>
+                {{ form.first_name.id_for_label }} {
+                  @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+                }
+              </style>
+              {% if form.first_name.errors %}
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              {% endif %}
+            </div>
             {% if form.first_name.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.first_name.errors.0 }}</p>
+              <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
             {% endif %}
-        </div>
-        
-        <div>
-            <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-            {{ form.last_name }}
+          </div>
+          
+          <div>
+            <label for="{{ form.last_name.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+              <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              Nom
+            </label>
+            <div class="relative">
+              {{ form.last_name }}
+              <style>
+                #{{ form.last_name.id_for_label }} {
+                  @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+                }
+              </style>
+              {% if form.last_name.errors %}
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+              {% endif %}
+            </div>
             {% if form.last_name.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.last_name.errors.0 }}</p>
+              <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
             {% endif %}
+          </div>
         </div>
         
-        <div>
-            <label for="{{ form.poste.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Poste</label>
+        <div class="form-field">
+          <label for="{{ form.poste.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Poste
+          </label>
+          <div class="relative">
             {{ form.poste }}
+            <style>
+              #{{ form.poste.id_for_label }} {
+                @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+              }
+            </style>
             {% if form.poste.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.poste.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.poste.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.poste.errors.0 }}</p>
+          {% endif %}
         </div>
         
-        <div>
-            <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+        <div class="form-field">
+          <label for="{{ form.password1.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            Mot de passe
+          </label>
+          <div class="relative">
             {{ form.password1 }}
+            <style>
+              #{{ form.password1.id_for_label }} {
+                @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+              }
+            </style>
             {% if form.password1.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.password1.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.password1.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.password1.errors.0 }}</p>
+          {% else %}
+            <p class="mt-1 text-xs text-gray-500">Votre mot de passe doit contenir au moins 8 caractères avec lettres et chiffres.</p>
+          {% endif %}
         </div>
         
-        <div>
-            <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+        <div class="form-field">
+          <label for="{{ form.password2.id_for_label }}" class="flex items-center text-sm font-medium text-gray-700 mb-1">
+            <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            Confirmer le mot de passe
+          </label>
+          <div class="relative">
             {{ form.password2 }}
+            <style>
+              #{{ form.password2.id_for_label }} {
+                @apply w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent input-field;
+              }
+            </style>
             {% if form.password2.errors %}
-                <p class="text-red-500 text-xs mt-1">{{ form.password2.errors.0 }}</p>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
             {% endif %}
+          </div>
+          {% if form.password2.errors %}
+            <p class="mt-1 text-sm text-red-600">{{ form.password2.errors.0 }}</p>
+          {% endif %}
         </div>
         
-        <div class="flex items-center">
+        <div class="form-field flex items-center bg-teal-50 p-3 rounded-lg">
+          <div class="flex items-center h-5">
             {{ form.is_admin }}
-            <label for="{{ form.is_admin.id_for_label }}" class="ml-2 block text-sm text-gray-700">S'inscrire en tant qu'administrateur</label>
+            <style>
+              {{ form.is_admin.id_for_label }} {
+                @apply h-4 w-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500;
+              }
+            </style>
+          </div>
+          <div class="ml-3 text-sm">
+            <label for="{{ form.is_admin.id_for_label }}" class="font-medium text-gray-700 flex items-center">
+              <svg class="w-4 h-4 mr-1 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              S'inscrire en tant qu'administrateur
+            </label>
+            <p class="text-gray-500 text-xs">Accès aux fonctionnalités de gestion avancées</p>
+          </div>
         </div>
         
-        <div>
-            <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-                S'inscrire
-            </button>
+        <div class="form-field">
+          <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-150 ease-in-out submit-btn">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+            <span>Créer mon compte</span>
+          </button>
         </div>
-    </form>
-    
-    <div class="mt-6 text-center">
+      </form>
+      
+      <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
-            Vous avez déjà un compte? <a href="{% url 'login' %}" class="text-teal-600 hover:text-teal-500">Se connecter</a>
+          Vous avez déjà un compte? 
+          <a href="{% url 'login' %}" class="font-medium text-teal-600 hover:text-teal-500 flex items-center justify-center mt-2">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+            Se connecter
+          </a>
         </p>
+      </div>
     </div>
+  </div>
+  
+  <!-- Indication de support -->
+  <p class="mt-8 text-center text-sm text-gray-500 animate-fadeIn" style="animation-delay: 1s;">
+    Besoin d'aide ? <a href="#" class="font-medium text-teal-600 hover:text-teal-500">Contactez notre support</a>
+  </p>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Amélioration du focus sur les champs
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('ring-2', 'ring-teal-100', 'rounded-lg');
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('ring-2', 'ring-teal-100', 'rounded-lg');
+      });
+    });
+    
+    // Animation du bouton de soumission
+    const submitBtn = document.querySelector('.submit-btn');
+    if (submitBtn) {
+      submitBtn.addEventListener('mouseenter', function() {
+        this.classList.add('scale-105');
+        setTimeout(() => {
+          this.classList.remove('scale-105');
+        }, 300);
+      });
+    }
+  });
+</script>
 {% endblock %}

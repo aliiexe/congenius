@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}Tableau de bord administrateur - Congenius{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
 {% block content %}
 <div class="space-y-6">
@@ -22,6 +25,15 @@
         <div class="bg-red-50 p-6 rounded-lg shadow-md text-center">
             <p class="text-sm text-red-700">Demandes rejetées</p>
             <p class="text-3xl font-bold text-red-600">{{ conges_rejetes }}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-teal-700 mb-4">Congés par employé</h2>
+            <canvas id="congesParEmploye"></canvas>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-teal-700 mb-4">Types de congés</h2>
+            <canvas id="typesConges"></canvas>
         </div>
     </div>
     
@@ -76,4 +88,66 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+    // Graphique des congés par employé
+    const ctxEmployes = document.getElementById('congesParEmploye').getContext('2d');
+    new Chart(ctxEmployes, {
+        type: 'bar',
+        data: {
+            labels: {{ employes_labels|safe }},
+            datasets: [{
+                label: 'Nombre de jours de congés',
+                data: {{ employes_data|safe }},
+                backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                borderColor: 'rgb(13, 148, 136)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 2,
+                        precision: 0
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Nombre de jours de congés par employé'
+                }
+            }
+        }
+    });
+
+    // Graphique des types de congés
+    const ctxTypes = document.getElementById('typesConges').getContext('2d');
+    new Chart(ctxTypes, {
+        type: 'doughnut',
+        data: {
+            labels: {{ types_conges_labels|safe }},
+            datasets: [{
+                data: {{ types_conges_data|safe }},
+                backgroundColor: [
+                    'rgba(13, 148, 136, 0.6)',
+                    'rgba(245, 158, 11, 0.6)',
+                    'rgba(59, 130, 246, 0.6)',
+                    'rgba(239, 68, 68, 0.6)',
+                    'rgba(167, 139, 250, 0.6)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+</script>
+
 {% endblock %}

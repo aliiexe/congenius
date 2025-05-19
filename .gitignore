@@ -1,0 +1,29 @@
+# Environnement virtuel
+env/
+venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de migrations Django (optionnel)
+# */migrations/*.py
+# !*/migrations/__init__.py

@@ -8,8 +8,8 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Conge, TypeConge, Employe
-from .forms import DemandeCongeForm, TraitementCongeForm, TypeCongeForm
+from .models import Conge, Contact, TypeConge, Employe
+from .forms import ContactForm, DemandeCongeForm, TraitementCongeForm, TypeCongeForm
 import django_filters
 from django.http import HttpRequest
 
@@ -278,3 +278,19 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Vous avez été déconnecté avec succès.")
     return redirect('login')
+
+# def contactUs(request):
+#     if request.method == 'POST':
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Votre message a été envoyé avec succès.")
+#             return redirect('home')
+#     else:
+#         form = ContactForm()
+    
+#     return render(request, 'contact.html', {'form': form})
+
+# def messages(request):
+#     messages = Contact.objects.all()
+#     return render(request, 'messages.html', {'messages': messages})

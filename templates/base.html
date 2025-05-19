@@ -29,10 +29,12 @@
                             <li><a href="{% url 'dashboard_admin' %}" class="hover:text-teal-200">Tableau de bord</a></li>
                             <li><a href="{% url 'gestion_conges' %}" class="hover:text-teal-200">Gestion des congés</a></li>
                             <li><a href="{% url 'gestion_types_conge' %}" class="hover:text-teal-200">Types de congé</a></li>
-                        {% else %}
+                            <li><a href="{% url 'messages' %}">Messages</a></li>
+                            {% else %}
                             <li><a href="{% url 'dashboard_employe' %}" class="hover:text-teal-200">Tableau de bord</a></li>
                             <li><a href="{% url 'demande_conge' %}" class="hover:text-teal-200">Demander un congé</a></li>
                             <li><a href="{% url 'historique_conges' %}" class="hover:text-teal-200">Historique</a></li>
+                            <li><a href="{% url 'contactUs' %}">Contact</a></li>
                         {% endif %}
                         <li><a href="{% url 'logout' %}" class="hover:text-teal-200">Déconnexion</a></li>
                     {% else %}

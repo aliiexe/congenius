@@ -75,3 +75,7 @@ class Conge(models.Model):
         verbose_name = "Congé"
         verbose_name_plural = "Congés"
         ordering = ['-date_demande']
+        
+# class Contact(models.Model):
+#     nom = models.CharField(max_length=100)
+#     message = models.TextField()

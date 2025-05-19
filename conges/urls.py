@@ -16,4 +16,6 @@ urlpatterns = [
     path('admin/types/modifier/<int:type_id>/', views.modifier_type_conge, name='modifier_type_conge'),
     path('admin/types/supprimer/<int:type_id>/', views.supprimer_type_conge, name='supprimer_type_conge'),
     path("logout/", views.logout_view, name="logout"),
+    # path("contactUs/", views.contactUs, name="contactUs"),
+    # path("messages", views.messages, name="messages"),
 ]

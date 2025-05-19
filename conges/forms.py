@@ -1,5 +1,5 @@
 from django import forms
-from .models import Conge, TypeConge
+from .models import Conge, Contact, TypeConge
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
@@ -78,3 +78,8 @@ class TypeCongeForm(forms.ModelForm):
                 'class': 'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500'
             })
         }
+
+# class ContactForm(forms.ModelForm):
+#     class Meta:
+#         model = Contact
+#         fields = ['nom', 'message']

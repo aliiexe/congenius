@@ -32,3 +32,4 @@ def home(request):
         'stats': get_statistics()
     }
     return render(request, '/templates/home.html', context)
+
